@@ -21,6 +21,11 @@ var connections = mysql.createConnection({
   database: 'ecom'
 });
 console.log(connections)
+app.use(cors({
+  origin: 'http://localhost:3000', // Allow only your app's origin
+  methods: 'GET,POST,PUT,DELETE', // Specify allowed methods
+  credentials: true,              // If credentials (e.g., cookies) are needed
+}));
 
 app.post('/submit-form', (req, res) => {
   const cssContent = req.body.css;
