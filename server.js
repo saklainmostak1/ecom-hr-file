@@ -15,12 +15,14 @@ var mysql = require('mysql');
 var connections = mysql.createConnection({
   // host: 'localhost',
   //  host: '192.168.0.110',
+  host: '162.0.239.48',
+  timezone: 'Z',
   port: '3306',
-  user: 'root',
-  password: '',
-  database: 'ecom'
+  user: "urbanit101_allowance",
+  database: "urbanit101_allowance",
+  password: "urb!n@!t!O!_@llO#!**w@nc=e"
 });
-console.log(connections)
+
 
 app.post('/submit-form', (req, res) => {
   const cssContent = req.body.css;
