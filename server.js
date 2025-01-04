@@ -15,14 +15,12 @@ var mysql = require('mysql');
 var connections = mysql.createConnection({
   // host: 'localhost',
   //  host: '192.168.0.110',
-  host: '162.0.239.48',
-  timezone: 'Z',
   port: '3306',
-  user: "urbanit101_allowance",
-  database: "urbanit101_allowance",
-  password: "urb!n@!t!O!_@llO#!**w@nc=e"
+  user: 'root',
+  password: '',
+  database: 'ecom'
 });
-
+console.log(connections)
 
 app.post('/submit-form', (req, res) => {
   const cssContent = req.body.css;
@@ -998,6 +996,347 @@ app.use("/images/editor", express.static(path.join(__dirname, "editor")));
   });
 
 
+
+// const sharp = require('sharp'); // For image resizing
+
+// function generateFolderPaths(currentDateTime) {
+//   const baseFolderPath = path.join(__dirname, '../files/images/products');
+//   const folderNames = ['original', 'small', 'medium', 'medium_small'];
+//   return folderNames.map(folderName => path.join(baseFolderPath, folderName, currentDateTime));
+// }
+
+// // Multer disk storage configuration
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     // Get current date-time
+//     const currentDateTime = getCurrentDateTime();
+//     // Generate folder paths for original and resized images
+//     const folderPaths = generateFolderPaths(currentDateTime);
+//     // Create folders if they don't exist
+//     folderPaths.forEach(folderPath => {
+//       if (!fs.existsSync(folderPath)) {
+//         fs.mkdirSync(folderPath, { recursive: true });
+//       }
+//     });
+//     // Pass the original folder path to multer
+//     cb(null, folderPaths[0]); // Assuming original folder path is the first one
+//   },
+//   filename: (req, file, cb) => {
+//     // Generate unique filename
+//     const uniqueFilename = `${file.originalname}`;
+//     // Pass the original filename to multer
+//     cb(null, uniqueFilename);
+//   },
+// });
+
+// // Multer upload configuration
+// const upload = multer({ storage: storage });
+
+// // Route for handling file uploads
+// app.post('/upload', upload.array('files', 5), async (req, res) => {
+//   // Get current date-time
+//   const currentDateTime = getCurrentDateTime();
+//   const folderPaths = generateFolderPaths(currentDateTime);
+
+
+//   connections.query('SELECT * FROM image_size', async (error, results, fields) => {
+//         if (error) {
+//           console.error('Error fetching image sizes:', error);
+//           return res.status(500).json({ message: 'Internal Server Error' });
+//         }
+//   // Move the uploaded file to small, medium, and medium_small folders
+//   await Promise.all(req.files.map(file => {
+//     const originalFilePath = path.join(folderPaths[0], file.filename);
+//     const resizedFilePaths = folderPaths.slice(1).map(folderPath => path.join(folderPath, file.filename));
+  
+//     const smallObject = results.find(data => data.name === 'small');
+    
+//     // Resize and save the image to each folder
+//     return Promise.all(resizedFilePaths.map((resizedFilePath, index) => {
+//       let width, height;
+     
+//       switch (index) {
+//         case 0:
+//           width = 150;
+//           height = 100; // Do not specify height
+//           break;
+//         case 1:
+//           width = 300;
+//           height = 150; // Do not specify height
+//           break;
+//         case 2:
+//           width = 50; // Do not specify width
+//           height = 100;
+//           break;
+//         default:
+//           width = 100;
+//           height = null; // Do not specify height
+//       }
+//       return sharp(originalFilePath).resize(width, height, { withoutEnlargement: false }).toFile(resizedFilePath);
+//     }));
+//   }));
+
+// })
+
+//   res.json({ message: 'File uploaded successfully' });
+// });
+
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     // Get current date-time
+//     const currentDateTime = getCurrentDateTime();
+
+//     // Create folders for original and resized images
+//     const originalFolderPath = path.join(__dirname, '../files/images/products/original', currentDateTime);
+//     const smallFolderPath = path.join(__dirname, '../files/images/products/small', currentDateTime);
+//     const mediumFolderPath = path.join(__dirname, '../files/images/products/medium', currentDateTime);
+
+//     // Create folders if they don't exist
+//     if (!fs.existsSync(originalFolderPath)) fs.mkdirSync(originalFolderPath, { recursive: true });
+//     if (!fs.existsSync(smallFolderPath)) fs.mkdirSync(smallFolderPath, { recursive: true });
+//     if (!fs.existsSync(mediumFolderPath)) fs.mkdirSync(mediumFolderPath, { recursive: true });
+
+//     // Pass the original folder path to multer
+//     cb(null, originalFolderPath);
+//   },
+//   filename: (req, file, cb) => {
+//     // Generate unique filename
+//     const uniqueFilename = `${file.originalname}`;
+
+//     // Pass the original filename to multer
+//     cb(null, uniqueFilename);
+//   },
+// });
+
+// // Image resize function
+// async function resizeAndSaveImage(filePath, filename, size) {
+//   const resizedImagePath = path.join(filePath, '..', '..', size, filename); // Construct resized image path
+
+//   // Resize image based on size
+//   let width;
+//   if (size === 'small') {
+//     width = 100; // Set width for small images
+//   } else if (size === 'medium') {
+//     width = 300; // Set width for medium images
+//   }
+
+//   // Resize and save the image
+//   await sharp(path.join(filePath, filename))
+//     .resize({ width: width })
+//     .toFile(resizedImagePath);
+// }
+
+// const upload = multer({ storage: storage });
+
+// app.post('/upload', upload.array('files', 5), (req, res) => {
+//   // Get current date-time
+//   const currentDateTime = getCurrentDateTime();
+//   const folderPath = path.join(__dirname, '../files/images/products/original', currentDateTime, 'original');
+
+//   // Resize and save images to small and medium folders
+//   req.files.forEach(file => {
+//     resizeAndSaveImage(folderPath, file.filename,);
+//     resizeAndSaveImage(folderPath, file.filename, );
+//   });
+
+//   res.json({ message: 'File uploaded successfully' });
+// });
+
+
+// const sharp = require('sharp'); // For image resizing
+
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     // Get current date-time
+//     const currentDateTime = getCurrentDateTime();
+
+//     // Create folders for original and resized images
+//     const originalFolderPath = path.join(__dirname, '../files/images', currentDateTime, 'original');
+//     const smallFolderPath = path.join(__dirname, '../files/images', currentDateTime, 'small');
+//     const mediumFolderPath = path.join(__dirname, '../files/images', currentDateTime, 'medium');
+
+//     // Create folders if they don't exist
+//     if (!fs.existsSync(originalFolderPath)) fs.mkdirSync(originalFolderPath, { recursive: true });
+//     if (!fs.existsSync(smallFolderPath)) fs.mkdirSync(smallFolderPath, { recursive: true });
+//     if (!fs.existsSync(mediumFolderPath)) fs.mkdirSync(mediumFolderPath, { recursive: true });
+
+//     // Pass the original folder path to multer
+//     cb(null, originalFolderPath);
+//   },
+//   filename: (req, file, cb) => {
+//     // Generate unique filename
+//     const uniqueFilename = `${Date.now()}_${file.originalname}`;
+
+//     // Pass the original filename to multer
+//     cb(null, uniqueFilename);
+//   },
+// });
+
+// // Image resize function
+// async function resizeAndSaveImage(filePath, filename, size) {
+//   const resizedImagePath = path.join(filePath, '..', size, filename); // Construct resized image path
+
+//   // Resize image based on size
+//   let width;
+//   if (size === 'small') {
+//     width = 100; // Set width for small images
+//   } else if (size === 'medium') {
+//     width = 300; // Set width for medium images
+//   }
+
+//   // Resize and save the image
+//   await sharp(path.join(filePath, filename))
+//     .resize({ width: width })
+//     .toFile(resizedImagePath);
+// }
+
+// const upload = multer({ storage: storage });
+
+// app.post('/upload', upload.array('files', 5), (req, res) => {
+//   // Get current date-time
+//   const currentDateTime = getCurrentDateTime();
+//   const folderPath = path.join(__dirname, '../files/images', currentDateTime, 'original');
+
+//   // Resize and save images to small and medium folders
+//   req.files.forEach(file => {
+//     resizeAndSaveImage(folderPath, file.filename, 'small');
+//     resizeAndSaveImage(folderPath, file.filename, 'medium');
+//   });
+
+//   res.json({ message: 'File uploaded successfully' });
+// });
+
+
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     // Get current date-time
+//     const currentDateTime = getCurrentDateTime();
+
+//     // Create folders for original and resized images
+//     const originalFolderPath = path.join(__dirname, '../files/images', currentDateTime, 'original');
+//     const smallFolderPath = path.join(__dirname, '../files/images', currentDateTime, 'small');
+//     const mediumFolderPath = path.join(__dirname, '../files/images', currentDateTime, 'medium');
+//     const mediumSmallFolderPath = path.join(__dirname, '../files/images', currentDateTime, 'medium_small');
+
+//     // Create folders if they don't exist
+//     if (!fs.existsSync(originalFolderPath)) fs.mkdirSync(originalFolderPath, { recursive: true });
+//     if (!fs.existsSync(smallFolderPath)) fs.mkdirSync(smallFolderPath, { recursive: true });
+//     if (!fs.existsSync(mediumFolderPath)) fs.mkdirSync(mediumFolderPath, { recursive: true });
+//     if (!fs.existsSync(mediumSmallFolderPath)) fs.mkdirSync(mediumSmallFolderPath, { recursive: true });
+
+//     // Pass the original folder path to multer
+//     cb(null, originalFolderPath);
+//   },
+//   filename: (req, file, cb) => {
+//     // Generate unique filename
+//     const uniqueFilename = `${Date.now()}_${file.originalname}`;
+
+//     // Pass the original filename to multer
+//     cb(null, uniqueFilename);
+//   },
+// });
+
+// const upload = multer({ storage: storage });
+
+// app.post('/upload', upload.array('files', 5), async (req, res) => {
+//   // Get current date-time
+//   const currentDateTime = getCurrentDateTime();
+//   const folderPath = path.join(__dirname, '../files/images', currentDateTime);
+
+//   // Move the uploaded file to small, medium, and medium_small folders
+//   await Promise.all(req.files.map(file => {
+//     const originalFilePath = path.join(folderPath, 'original', file.filename);
+//     const smallFilePath = path.join(folderPath, 'small', file.filename);
+//     const mediumFilePath = path.join(folderPath, 'medium', file.filename);
+//     const mediumSmallFilePath = path.join(folderPath, 'medium_small', file.filename);
+
+//     return Promise.all([
+//       fs.promises.copyFile(originalFilePath, smallFilePath),
+//       fs.promises.copyFile(originalFilePath, mediumFilePath),
+//       fs.promises.copyFile(originalFilePath, mediumSmallFilePath)
+//     ]);
+//   }));
+
+//   res.json({ message: 'File uploaded successfully' });
+// });
+
+// product only
+
+// const sharp = require('sharp');
+
+// const storage = multer.diskStorage({
+
+
+  
+//   destination: (req, file, cb) => {
+    
+//     // Get current date-time
+//     const currentDateTime = getCurrentDateTime();
+
+//     // Create folders for original and resized images
+//     const originalFolderPath = path.join(__dirname, '../files/images/products', currentDateTime, 'original');
+//     const smallFolderPath = path.join(__dirname, '../files/images/products', currentDateTime, 'small');
+//     const mediumFolderPath = path.join(__dirname, '../files/images/products', currentDateTime, 'medium');
+//     const mediumSmallFolderPath = path.join(__dirname, '../files/images/products', currentDateTime, 'medium_small');
+
+//     // Create folders if they don't exist
+//     if (!fs.existsSync(originalFolderPath)) fs.mkdirSync(originalFolderPath, { recursive: true });
+//     if (!fs.existsSync(smallFolderPath)) fs.mkdirSync(smallFolderPath, { recursive: true });
+//     if (!fs.existsSync(mediumFolderPath)) fs.mkdirSync(mediumFolderPath, { recursive: true });
+//     if (!fs.existsSync(mediumSmallFolderPath)) fs.mkdirSync(mediumSmallFolderPath, { recursive: true });
+
+//     // Pass the original folder path to multer
+//     cb(null, originalFolderPath);
+//   },
+//   filename: (req, file, cb) => {
+//     // Generate unique filename
+//     const uniqueFilename = `${file.originalname}`;
+
+//     // Pass the original filename to multer
+//     cb(null, uniqueFilename);
+//   },
+// });
+
+// const upload = multer({ storage: storage });
+// // /file/upload/product
+// app.post('/upload', upload.array('files', 5), async (req, res) => {
+
+
+//   const {fields} = req.body
+//   console.log(fields)
+//   // Get current date-time
+//   const currentDateTime = getCurrentDateTime();
+//   const folderPath = path.join(__dirname, '../files/images/products', currentDateTime);
+
+//   // Fetch image sizes from the database
+//   connections.query('SELECT * FROM image_size', async (error, results, fields) => {
+//     if (error) {
+//       console.error('Error fetching image sizes:', error);
+//       return res.status(500).json({ message: 'Internal Server Error' });
+//     }
+
+//     // Move the uploaded file to small, medium, and medium_small folders
+//     await Promise.all(req.files.map(file => {
+//       const originalFilePath = path.join(folderPath, 'original', file.filename);
+//       const smallFilePath = path.join(folderPath, 'small', file.filename);
+//       const mediumFilePath = path.join(folderPath, 'medium', file.filename);
+//       const mediumSmallFilePath = path.join(folderPath, 'medium_small', file.filename);
+
+//       // Determine the resizing parameters based on image sizes fetched from the database
+//       const smallSize = results.find(size => size.name === 'small');
+//       const mediumSize = results.find(size => size.name === 'medium');
+//       const mediumSmallSize = results.find(size => size.name === 'medium_small');
+
+//       return Promise.all([
+//         sharp(originalFilePath).resize({ width: smallSize.width, height: smallSize.height }).toFile(smallFilePath),
+//         sharp(originalFilePath).resize({ width: mediumSize.width, height: mediumSize.height }).toFile(mediumFilePath),
+//         sharp(originalFilePath).resize({ width: mediumSmallSize.width, height: mediumSmallSize.height }).toFile(mediumSmallFilePath)
+//       ]);
+//     }));
+
+//     res.json({ message: 'File uploaded successfully' });
+//   });
+// });
 
 
 
